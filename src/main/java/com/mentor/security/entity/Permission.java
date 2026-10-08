@@ -2,7 +2,6 @@ package com.mentor.security.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,5 +14,8 @@ public class Permission {
 
     /* IF user 1 have ROLE_ADMIN - WRITE_USER READ_USER DELETE_USER UPDATE_USER */
     @Column(unique = true, nullable = false)
-    private String name; //WRITE_ , READ_
+    private String name;
+
+    @ManyToMany(mappedBy = "permissions")
+    private Set<Role> roles;
 }
