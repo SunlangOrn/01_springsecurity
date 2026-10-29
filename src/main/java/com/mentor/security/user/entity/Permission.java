@@ -1,4 +1,4 @@
-package com.mentor.security.entity;
+package com.mentor.security.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

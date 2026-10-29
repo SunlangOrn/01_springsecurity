@@ -1,4 +1,4 @@
-package com.mentor.security.dto;
+package com.mentor.security.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

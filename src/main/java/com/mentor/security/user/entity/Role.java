@@ -1,8 +1,8 @@
-package com.mentor.security.entity;
+package com.mentor.security.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.HashSet;
+
 import java.util.Set;
 
 @Entity
