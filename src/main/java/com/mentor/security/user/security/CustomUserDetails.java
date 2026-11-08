@@ -9,46 +9,28 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
-@Getter @Setter @NoArgsConstructor
+@Getter
 public class CustomUserDetails implements UserDetails {
 
-    private User user;
+    private final User user;
+    private final List<GrantedAuthority> authorities;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
+    public CustomUserDetails(User user) {
+        this.user = user;
+        this.authorities = user.getRoles().stream()          // runs while the session is open
+                .<GrantedAuthority>map(r -> new SimpleGrantedAuthority(r.getName()))
+                .toList();
     }
 
-    @Override
-    public @Nullable String getPassword() {
-        return user.getPassword();
-    }
-
-    @Override
-    public String getUsername() {
-        return user.getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return user.getIsAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return Boolean.TRUE.equals(user.getIsAccountNonLocked());
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return getUser().getIsCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-    return !user.getIsDeleted() && user.getIsVerified();
+    @Override public Collection<? extends GrantedAuthority> getAuthorities() { return authorities; }
+    @Override public String getPassword() { return user.getPassword(); }
+    @Override public String getUsername() { return user.getEmail(); }
+    @Override public boolean isAccountNonExpired() { return Boolean.TRUE.equals(user.getIsAccountNonExpired()); }
+    @Override public boolean isAccountNonLocked() { return Boolean.TRUE.equals(user.getIsAccountNonLocked()); }
+    @Override public boolean isCredentialsNonExpired() { return Boolean.TRUE.equals(user.getIsCredentialsNonExpired()); }
+    @Override public boolean isEnabled() {
+        return !Boolean.TRUE.equals(user.getIsDeleted()) && Boolean.TRUE.equals(user.getIsVerified());
     }
 }
