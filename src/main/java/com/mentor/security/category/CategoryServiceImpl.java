@@ -42,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         category.setName(request.name());
         if (request.status() != null) {
-            CategoryStatus status = category.getStatus();
+            category.getStatus();
         }
 
         Category saved = categoryRepository.save(category);
@@ -58,4 +58,22 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.delete(category);
     }
 
+    @Override
+    @Transactional
+    public void active(Long id){
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
+        category.setStatus(CategoryStatus.ACTIVE);
+
+        categoryRepository.save(category);
+    }
+    @Override
+    @Transactional
+    public void inactive(Long id){
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
+        category.setStatus(CategoryStatus.INACTIVE);
+
+        categoryRepository.save(category);
+    }
 }

@@ -15,4 +15,8 @@ public interface CategoryService {
 
     CategoryResponseDetail update(Long id, CategoryRequest request);
 
+    void active(Long id);
+
+    void inactive(Long id);
+
 }
