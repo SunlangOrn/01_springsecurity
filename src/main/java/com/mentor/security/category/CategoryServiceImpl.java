@@ -1,7 +1,6 @@
 package com.mentor.security.category;
 
 import com.mentor.security.category.dto.CategoryRequest;
-import com.mentor.security.category.dto.CategoryResponse;
 import com.mentor.security.category.dto.CategoryResponseDetail;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +14,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
-
-    @Override
-    public CategoryResponse getCategoryPublic(Long id){
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
-        return categoryMapper.toResponse(category);
-    }
 
     @Override
     public CategoryResponseDetail create(CategoryRequest request) {
@@ -40,9 +32,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDetail getById(Long id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
-        return categoryMapper.toResponseDetail(category);
     }
 
     @Override
@@ -67,26 +56,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
 
         categoryRepository.delete(category);
-    }
-
-    @Override
-    @Transactional
-    public void active(Long id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
-        category.setStatus(CategoryStatus.ACTIVE);
-        categoryRepository.save(category);
-
-    }
-
-    @Override
-    @Transactional
-    public void inactive(Long id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found: " + id));
-        category.setStatus(CategoryStatus.INACTIVE);
-        categoryRepository.save(category);
-
     }
 
 }
