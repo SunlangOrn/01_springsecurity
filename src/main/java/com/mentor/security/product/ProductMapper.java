@@ -9,4 +9,7 @@ public interface ProductMapper {
     @Mapping(target = "categoryIds", source = "category.id")
     @Mapping(target = "categoryName", source = "category.name")
     ProductResponseDetail toProductResponseDetail(Product product);
+
+    @Mapping(target = "category.id", source = "categoryIds")
+    Product toEntity(ProductRequest request);
 }

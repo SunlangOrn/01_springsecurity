@@ -8,4 +8,8 @@ public interface ProductService {
 
     //Paging and sorting
     PageResponse<ProductResponseDetail> list(Pageable pageable);
+
+    ProductResponseDetail create(ProductRequest request, String sku , String name);
+
+    ProductResponseDetail getById(Long id);
 }
