@@ -26,6 +26,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductResponseDetail getById(Long id) {
+        Product data = productRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND , "Product not found id : " + id));
+        return productMapper.toProductResponseDetail(data);
+    }
+
+    @Override
     public ProductResponseDetail create(ProductRequest request, String sku , String name) {
 
         //1 . L01 , 2 . LO1
@@ -44,9 +51,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDetail getById(Long id) {
-        Product data = productRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND , "Product not found id : " + id));
-        return productMapper.toProductResponseDetail(data);
+    @Transactional
+    public ProductResponseDetail update(Long id, ProductUpdateRequest request){
+        /*
+           1.Product olddata = findById
+           2
+        * */
+        Product oldData = productRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND , "product not found"));
+
+        if (request.sku() != null ){
+            if(productRepository.existsBySkuAndIdNotAndDeletedAtIsNull(request.sku(), id)){
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "product sku already exits");
+            }
+            oldData.setSku(request.sku());
+        }
+        if (request.name() != null ) oldData.setName(request.name());
+        if (request.price() != null) oldData.setPrice(request.price());
+        if (request.stock() != null) oldData.setStock(request.stock());
+        if (request.status() != null) oldData.setStatus(ProductStatus.valueOf(request.status()));
+        return productMapper.toProductResponseDetail(oldData);
     }
+
+
 }

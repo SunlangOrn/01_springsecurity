@@ -9,7 +9,9 @@ public interface ProductService {
     //Paging and sorting
     PageResponse<ProductResponseDetail> list(Pageable pageable);
 
+    ProductResponseDetail getById(Long id);
+
     ProductResponseDetail create(ProductRequest request, String sku , String name);
 
-    ProductResponseDetail getById(Long id);
+    ProductResponseDetail update(Long id, ProductUpdateRequest request);
 }
