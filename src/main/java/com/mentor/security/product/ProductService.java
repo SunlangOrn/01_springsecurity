@@ -14,4 +14,10 @@ public interface ProductService {
     ProductResponseDetail create(ProductRequest request, String sku , String name);
 
     ProductResponseDetail update(Long id, ProductUpdateRequest request);
+
+    void active(String sku);
+
+    void inactive(String sku);
+
+    void delete(String sku);
 }

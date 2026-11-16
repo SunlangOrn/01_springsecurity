@@ -13,13 +13,11 @@ public interface ProductRepository extends JpaRepository<Product, Long > {
 
     Optional<Product> findByIdAndDeletedAtIsNull(Long id);
 
+    Optional<Product> findBySkuAndDeletedAtIsNull(String sku);
+
     boolean existsBySku(String sku);
 
     boolean existsByNameIgnoreCase(String name);
 
     boolean existsBySkuAndIdNotAndDeletedAtIsNull(String sku, Long id);
-
-    List<Product> id(Long id);
-
-    List<Product> id(Long id);
 }

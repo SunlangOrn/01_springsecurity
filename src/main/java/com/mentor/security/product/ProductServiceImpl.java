@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -71,6 +72,32 @@ public class ProductServiceImpl implements ProductService {
         if (request.stock() != null) oldData.setStock(request.stock());
         if (request.status() != null) oldData.setStatus(ProductStatus.valueOf(request.status()));
         return productMapper.toProductResponseDetail(oldData);
+    }
+
+    @Override
+    public void active(String sku) {
+        Product product = productRepository.findBySkuAndDeletedAtIsNull(sku)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+
+        product.setStatus(ProductStatus.ACTIVE);
+        productRepository.save(product);
+    }
+
+    @Override
+    public void inactive(String sku) {
+        Product product = productRepository.findBySkuAndDeletedAtIsNull(sku)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+
+        product.setStatus(ProductStatus.INACTIVE);
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public void delete(String sku) {
+        Product product = productRepository.findBySkuAndDeletedAtIsNull(sku)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+        productRepository.delete(product);
     }
 
 
