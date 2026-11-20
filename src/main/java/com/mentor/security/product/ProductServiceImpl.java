@@ -21,6 +21,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
+    public PageResponse<ProductResponse> listUserSide(ProductStatus status ,Pageable pageable) {
+        Page<Product> productPage = productRepository.findAllByDeletedAtIsNullAndStatus(ProductStatus.ACTIVE ,pageable);
+        return PageResponse.of(productPage, productMapper::toResponse);
+    }
+
+    @Override
+    public ProductResponse getById(ProductStatus status ,Long id) {
+        Product data = productRepository.findByIdAndDeletedAtIsNullAndStatus(ProductStatus.ACTIVE , id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND , "Product not found id : " + id));
+        return productMapper.toResponse(data);
+    }
+
+    @Transactional
+    @Override
     public PageResponse<ProductResponseDetail> list(Pageable pageable) {
         Page<Product> productPage = productRepository.findAllByDeletedAtIsNull(pageable);
         return PageResponse.of(productPage, productMapper::toProductResponseDetail);
@@ -33,19 +47,21 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponseDetail(data);
     }
 
+   @Transactional
     @Override
-    public ProductResponseDetail create(ProductRequest request, String sku , String name) {
+    public ProductResponseDetail create(ProductRequest request) {
 
         //1 . L01 , 2 . LO1
 
-        Product newProduct = productMapper.toEntity(request);
 
-        if(productRepository.existsBySku(sku)){
+
+        if(productRepository.existsBySku(request.sku())){
             throw new ResponseStatusException(HttpStatus.CONFLICT , "Sku is already exits");
         }
-        if(productRepository.existsByNameIgnoreCase(name)){
+        if(productRepository.existsByNameIgnoreCase(request.name())){
             throw new ResponseStatusException(HttpStatus.CONFLICT ,"product name already exits");
         }
+       Product newProduct = productMapper.toEntity(request);
 
         Product savedProduct = productRepository.save(newProduct);
         return productMapper.toProductResponseDetail(savedProduct);

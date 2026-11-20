@@ -8,9 +8,6 @@ public interface CategoryService {
     //create
     CategoryResponseDetail create(CategoryRequest request);
 
-    //get by id
-    CategoryResponseDetail getById(Long id);
-
     void delete(Long id);
 
     CategoryResponseDetail update(Long id, CategoryRequest request);

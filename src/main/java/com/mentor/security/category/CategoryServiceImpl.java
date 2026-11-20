@@ -30,9 +30,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toResponseDetail(entity);
     }
 
-    @Override
-    public CategoryResponseDetail getById(Long id) {
-    }
 
     @Override
     @Transactional

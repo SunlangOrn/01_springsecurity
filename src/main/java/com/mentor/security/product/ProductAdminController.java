@@ -8,7 +8,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1/admin/products")
 @RestController
 @RequiredArgsConstructor
 public class ProductAdminController {
@@ -25,8 +25,8 @@ public class ProductAdminController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponseDetail create(@RequestBody ProductRequest request, String sku , String name){
-        return productService.create(request, sku , name);
+    public ProductResponseDetail create(@Valid@RequestBody ProductRequest request){
+        return productService.create(request);
     }
 
     @GetMapping("/{id}")

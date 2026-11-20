@@ -14,9 +14,5 @@ public class CategoryController {
 
     private final CategoryService service;
 
-    @GetMapping("/{id}")
-    public CategoryResponse getCategoryPublic(@PathVariable Long id ){
-        return service.getCategoryPublic(id);
-    }
 }
 

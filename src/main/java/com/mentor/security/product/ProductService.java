@@ -11,7 +11,7 @@ public interface ProductService {
 
     ProductResponseDetail getById(Long id);
 
-    ProductResponseDetail create(ProductRequest request, String sku , String name);
+    ProductResponseDetail create(ProductRequest request);
 
     ProductResponseDetail update(Long id, ProductUpdateRequest request);
 
@@ -20,4 +20,8 @@ public interface ProductService {
     void inactive(String sku);
 
     void delete(String sku);
+
+    PageResponse<ProductResponse> listUserSide(ProductStatus status ,Pageable pageable);
+
+    ProductResponse getById(ProductStatus status, Long id);
 }

@@ -16,12 +16,6 @@ public class CategoryAdminController {
     private final CategoryService categoryService;
     private final ServerHttpMessageConvertersCustomizer serverConvertersCustomizer;
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{id}")
-    public CategoryResponseDetail get(@PathVariable Long id){
-        return categoryService.getById(id);
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
     public CategoryResponseDetail create(@Valid@RequestBody CategoryRequest categoryRequest) {

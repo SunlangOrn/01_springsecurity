@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public record ProductResponseDetail (
         Long id,
-        String stockKeepingUnit,
+        String sku,
         String name,
         BigDecimal price,
         Integer stock,
